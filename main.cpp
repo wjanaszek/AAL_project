@@ -155,10 +155,18 @@ int main(int argc, char ** argv) {
 			arg4 = argv[5];
 			arg5 = argv[6];
 			int alg_type, R, mCount;
-			float tmp, averageTime, q = 1.0;
+			int median;
+			float T_n, T_n_median;
+			float tmp, t_n_median, averageTime, q = 1.0f;
 			float measureTable[MAX_M_COUNT];
 			if(arg3 != nullptr){
                 alg_type = stoi(string(arg3));
+                if(alg_type == 0){
+                    T_n = Algorithms::newton(N*N, N) * N*N*N;
+                }
+                else {
+                    T_n = N*N*N;
+                }
 			}
 			else {
                 cout << "Nie wybrano zadnego algorytmu!" << endl;
@@ -172,23 +180,73 @@ int main(int argc, char ** argv) {
                 exit(1);
 			}
 			if(arg5 != nullptr){
-                mCount = stoi(string(arg5));
+                mCount = stoi(string(arg5));        // liczba pomiarow
 			}
 			else {
                 cout << "Nie podano ilosci pomiarow!" << endl;
                 exit(1);
 			}
+			int tmp1 = N, tmp2 = N, mC1;
+			if(mCount % 2 == 0){
+                mC1 = mCount / 2 - 1;
+                for(int i = 0; i < mCount; i++){
+                    if(i < mC1){
+                        tmp1 += R;
+                    }
+                    else {
+                        tmp2 = tmp1;
+                        tmp2 += R;
+                        break;
+                    }
+                }
+                median = (tmp1 + tmp2)/2;
+			}
+			else {
+                mC1 = mCount / 2;
+                for(int i = 0; i < mCount; i++){
+                    if(i < mC1){
+                        tmp1 += R;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                median = tmp1;
+			}
+			if(alg_type == 0){
+                T_n_median = Algorithms::newton(median * median, median) * median*median*median;
+			}
+			else {
+                T_n_median = median * median * median;
+			}
+			cout << "mediana = " << median << ", N = " << N <<  endl;
 			cout << "Rozpoczynam pomiary" << endl;
 			alg_type == 0 ? cout << "brutal force" << endl : cout << "optimal" << endl;
+			vector<points> tmpVec = ds.generateData(median, seed);
+			if(alg_type == 0){
+                t_n_median = brutalForceTest(tmpVec);
+			}
+			else {
+                t_n_median = optAlgorithmTest(tmpVec);
+			}
 			cout << "| n      | t(n) [ms]      | q(n)" << endl;
 			cout << "--------------------------------" << endl;
+			q = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
+			myPrintLine(median, t_n_median * 1000.0f, q);
 			for(int i = 0; i < mCount; i++){
+                if(alg_type == 0){
+                    T_n = Algorithms::newton(N*N, N) * N*N*N;
+                }
+                else {
+                    T_n = N*N*N;
+                }
                 input = ds.generateData(N, seed);
                 if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0
                     for(int j = 0; j < MAX_M_COUNT; j++){
                         tmp = brutalForceTest(input);
                         measureTable[j] = tmp;
                     }
+                    q = (float)(measureTable[0] * T_n_median)/(float)(t_n_median * T_n);
                     averageTime = average(measureTable, MAX_M_COUNT);
                     myPrintLine(N, averageTime * 1000.0f, q);
                     N += R;
@@ -203,6 +261,7 @@ int main(int argc, char ** argv) {
                         measureTable[j] = tmp;
                         input = ds.generateData(N, seed);
                     }
+                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
                     averageTime = average(measureTable, MAX_M_COUNT);
                     myPrintLine(N, averageTime * 1000.0f, q);
                     N += R;
@@ -218,10 +277,18 @@ int main(int argc, char ** argv) {
 			arg4 = argv[4];
 			arg5 = argv[5];
 			int alg_type, R, mCount;
-			float tmp, averageTime, q = 1.0;
+			int median;
+			float T_n, T_n_median;
+			float tmp, t_n_median, averageTime, q = 1.0f;
 			float measureTable[MAX_M_COUNT];
 			if(arg3 != nullptr){
                 alg_type = stoi(string(arg3));
+                if(alg_type == 0){
+                    T_n = Algorithms::newton(N*N, N) * N*N*N;
+                }
+                else {
+                    T_n = N*N*N;
+                }
 			}
 			else {
                 cout << "Nie wybrano zadnego algorytmu!" << endl;
@@ -241,11 +308,60 @@ int main(int argc, char ** argv) {
                 cout << "Nie podano ilosci pomiarow!" << endl;
                 exit(1);
 			}
+			int tmp1 = N, tmp2 = N, mC1;
+			if(mCount % 2 == 0){
+                mC1 = mCount / 2 - 1;
+                for(int i = 0; i < mCount; i++){
+                    if(i < mC1){
+                        tmp1 += R;
+                    }
+                    else {
+                        tmp2 = tmp1;
+                        tmp2 += R;
+                        break;
+                    }
+                }
+                median = (tmp1 + tmp2)/2;
+			}
+			else {
+                mC1 = mCount / 2;
+                for(int i = 0; i < mCount; i++){
+                    if(i < mC1){
+                        tmp1 += R;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                median = tmp1;
+			}
+			if(alg_type == 0){
+                T_n_median = Algorithms::newton(median * median, median) * median*median*median;
+			}
+			else {
+                T_n_median = median * median * median;
+			}
+			cout << "mediana = " << median << ", N = " << N <<  endl;
 			cout << "Rozpoczynam pomiary" << endl;
 			alg_type == 0 ? cout << "brutal force" << endl : cout << "optimal" << endl;
+			vector<points> tmpVec = ds.generateData(median, seed);
+			if(alg_type == 0){
+                t_n_median = brutalForceTest(tmpVec);
+			}
+			else {
+                t_n_median = optAlgorithmTest(tmpVec);
+			}
 			cout << "| n      | t(n) [ms]      | q(n)" << endl;
 			cout << "--------------------------------" << endl;
+			q = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
+			myPrintLine(median, t_n_median * 1000.0f, q);
 			for(int i = 0; i < mCount; i++){
+                if(alg_type == 0){
+                    T_n = Algorithms::newton(N*N, N) * N*N*N;
+                }
+                else {
+                    T_n = N*N*N;
+                }
                 input = ds.generateData(N);
                 if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0
                     for(int j = 0; j < MAX_M_COUNT; j++){
@@ -253,6 +369,7 @@ int main(int argc, char ** argv) {
                         measureTable[j] = tmp;
                     }
                     averageTime = average(measureTable, MAX_M_COUNT);
+                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
                     myPrintLine(N, averageTime * 1000.0f, q);
                     N += R;
                 }
@@ -267,6 +384,7 @@ int main(int argc, char ** argv) {
                         input = ds.generateData(N);
                     }
                     averageTime = average(measureTable, MAX_M_COUNT);
+                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
                     myPrintLine(N, averageTime * 1000.0f, q);
                     N += R;
                 }
@@ -510,9 +628,8 @@ void optAlgorithm(vector<points> v)
      // Fill in the background with a dark gray color
     ezd_fill( hDib_CN, 0x606060 );
     opt = Algorithms::executeAlgorithm(v);
-    cout << "tu4" << endl;
     drawToFile(&hDib_CN, opt);
-    ezd_save(hDib_CN, imgFileName);
+        ezd_save(hDib_CN, imgFileName);
     ezd_destroy(hDib_CN);
 
     cout << "Algorytm nr 2 wykonal sie w czasie " << float( clock () - begin_time ) /  CLOCKS_PER_SEC << " dla N = " << inputSize << endl;
