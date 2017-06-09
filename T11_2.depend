@@ -1,0 +1,116 @@
+# depslib dependency file v1.0
+1334450134 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\ezdib.c
+	"ezdib.h"
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<string.h>
+
+1490652252 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\ezdib.h
+
+1496910715 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\main.cpp
+	<iostream>
+	<string>
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<sstream>
+	<ctime>
+	"DataService.h"
+	"FileIOException.h"
+	"Point2D.h"
+	"Algorithms.h"
+	"ezdib.h"
+	"SetOfSegments.h"
+	"Segment.h"
+	<sstream>
+
+1492373455 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\fileioexception.h
+
+1492373422 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\point2d.h
+	<vector>
+	<string>
+
+1492373387 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\algorithms.h
+	<vector>
+	<string>
+	"Segment.h"
+	"SetOfSegments.h"
+	"Point2D.h"
+
+1496252508 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\algorithms.cpp
+	"Algorithms.h"
+	<iostream>
+	<math.h>
+	<climits>
+	<vector>
+
+1492373418 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\datareader.cpp
+	"DataReader.h"
+	<fstream>
+	<iostream>
+	"WrongNumberOfElementsException.h"
+	"FileIOException.h"
+
+1492373445 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\datareader.h
+	<vector>
+	<string>
+	"Point2D.h"
+
+1492373472 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\wrongnumberofelementsexception.h
+
+1492377558 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\dataservice.cpp
+	"DataService.h"
+
+1492377541 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\dataservice.h
+	"DataGenerator.h"
+	"DataReader.h"
+
+1492373436 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\fileioexception.cpp
+	"FileIOException.h"
+
+1492268041 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\point2d.cpp
+	"Point2D.h"
+	<string>
+	"Algorithms.h"
+
+1496233608 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\segment.cpp
+	"Segment.h"
+	<iostream>
+	"Algorithms.h"
+
+1492373384 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\segment.h
+	"Point2D.h"
+
+1492373431 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\wrongnumberofelementsexception.cpp
+	"WrongNumberOfElementsException.h"
+
+1492373396 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\setofsegments.h
+	<vector>
+	"Segment.h"
+	"Point2D.h"
+
+1496252683 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\setofsegments.cpp
+	"SetOfSegments.h"
+	"Sweeper.h"
+	"Point2D.h"
+	<vector>
+	<iostream>
+
+1496910992 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\sweeper.cpp
+	"Sweeper.h"
+	<climits>
+	<iostream>
+
+1496910767 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\sweeper.h
+	<vector>
+	"Segment.h"
+
+1496875242 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\datagenerator.cpp
+	"DataGenerator.h"
+	<ctime>
+
+1496875089 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\include\datagenerator.h
+	<vector>
+	"Point2D.h"
+
