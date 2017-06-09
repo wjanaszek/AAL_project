@@ -222,7 +222,7 @@ SetOfSegments * Algorithms::executeAlgorithm(vector<points> v)
     int minDistance = INT_MAX;
     int currDistance;
     int indexI, indexJ;
-    Point2D * tmpI, * tmpJ;
+    Point2D * tmpI = nullptr, * tmpJ = nullptr;
     int segmentIndex = 1;
 
     // Wygeneruj zbior, laczac punkty najmniej oddalone od siebie
@@ -238,21 +238,28 @@ SetOfSegments * Algorithms::executeAlgorithm(vector<points> v)
                 }
             }
         }
-        tmpI = new Point2D(v[0].at(indexI).getX(), v[0].at(indexI).getY(), /*segmentIndex*/v[0].at(indexI).groupNumber);
-        tmpJ = new Point2D(v[1].at(indexJ).getX(), v[1].at(indexJ).getY(), /*segmentIndex*/v[1].at(indexJ).groupNumber);
+        tmpI = new Point2D(v[0].at(indexI).getX(), v[0].at(indexI).getY(), v[0].at(indexI).groupNumber);
+        tmpJ = new Point2D(v[1].at(indexJ).getX(), v[1].at(indexJ).getY(), v[1].at(indexJ).groupNumber);
         result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
         delete tmpI;
         delete tmpJ;
         v[0].erase(v[0].begin() + indexI);
         v[1].erase(v[1].begin() + indexJ);
         if(v[0].size() == 1){
-            tmpI = new Point2D(v[0].at(0).getX(), v[0].at(0).getY(), /*segmentIndex*/v[0].at(0).groupNumber);
-            tmpJ = new Point2D(v[1].at(0).getX(), v[1].at(0).getY(), /*segmentIndex*/v[1].at(0).groupNumber);
+            tmpI = new Point2D(v[0].at(0).getX(), v[0].at(0).getY(),v[0].at(0).groupNumber);
+            tmpJ = new Point2D(v[1].at(0).getX(), v[1].at(0).getY(), v[1].at(0).groupNumber);
             result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
             v[0].clear();
             v[1].clear();
-            delete tmpI;
-            delete tmpJ;
+            if(tmpI != nullptr){
+                delete tmpI;
+            }
+            if(tmpJ != nullptr){
+                delete tmpJ;
+            }
+            break;
+        }
+        else {
             break;
         }
     }
