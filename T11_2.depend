@@ -8,7 +8,7 @@
 
 1490652252 c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\ezdib.h
 
-1497042930 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\main.cpp
+1497046356 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\main.cpp
 	<iostream>
 	<string>
 	<cstring>
@@ -38,7 +38,7 @@
 	"SetOfSegments.h"
 	"Point2D.h"
 
-1497042260 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\algorithms.cpp
+1497088995 source:c:\users\wjanaszek\desktop\studia_pw\#5_17l\aal\projekt2\t11_2\src\algorithms.cpp
 	"Algorithms.h"
 	<iostream>
 	<math.h>

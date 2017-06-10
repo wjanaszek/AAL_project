@@ -53,6 +53,8 @@ float optAlgorithmTest(vector<points> v);
 char * getCurrentDateToString();
 void myPrintLine(int N, float averageTime, float q);
 float average(float *table, int tableSize);
+float getT_n(int N, int alg_type);
+float getMedian(int N, int R, int mCount);
 
 // Function to draw to specified imagefile
 void drawToFile(HEZDIMAGE * image, SetOfSegments * s);
@@ -161,12 +163,7 @@ int main(int argc, char ** argv) {
 			float measureTable[MAX_M_COUNT];
 			if(arg3 != nullptr){
                 alg_type = stoi(string(arg3));
-                if(alg_type == 0){
-                    T_n = Algorithms::newton(N*N, N) * N*N*N;
-                }
-                else {
-                    T_n = N*N*N;
-                }
+                T_n = getT_n(N, alg_type);
 			}
 			else {
                 cout << "Nie wybrano zadnego algorytmu!" << endl;
@@ -186,39 +183,9 @@ int main(int argc, char ** argv) {
                 cout << "Nie podano ilosci pomiarow!" << endl;
                 exit(1);
 			}
-			int tmp1 = N, tmp2 = N, mC1;
-			if(mCount % 2 == 0){
-                mC1 = mCount / 2 - 1;
-                for(int i = 0; i < mCount; i++){
-                    if(i < mC1){
-                        tmp1 += R;
-                    }
-                    else {
-                        tmp2 = tmp1;
-                        tmp2 += R;
-                        break;
-                    }
-                }
-                median = (tmp1 + tmp2)/2;
-			}
-			else {
-                mC1 = mCount / 2;
-                for(int i = 0; i < mCount; i++){
-                    if(i < mC1){
-                        tmp1 += R;
-                    }
-                    else {
-                        break;
-                    }
-                }
-                median = tmp1;
-			}
-			if(alg_type == 0){
-                T_n_median = Algorithms::newton(median * median, median) * median*median*median;
-			}
-			else {
-                T_n_median = median * median * median;
-			}
+			median = getMedian(N, R, mCount);
+			T_n_median = getT_n(median, alg_type);
+			T_n = getT_n(median, alg_type);
 			cout << "mediana = " << median << ", N = " << N <<  endl;
 			cout << "Rozpoczynam pomiary" << endl;
 			alg_type == 0 ? cout << "brutal force" << endl : cout << "optimal" << endl;
@@ -229,19 +196,16 @@ int main(int argc, char ** argv) {
 			else {
                 t_n_median = optAlgorithmTest(tmpVec);
 			}
+
+			float q_median = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
+            bool medianToShow = false;
+
 			cout << "| n      | t(n) [ms]      | q(n)" << endl;
 			cout << "--------------------------------" << endl;
-			q = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
-			myPrintLine(median, t_n_median * 1000.0f, q);
 			for(int i = 0; i < mCount; i++){
-                if(alg_type == 0){
-                    T_n = Algorithms::newton(N*N, N) * N*N*N;
-                }
-                else {
-                    T_n = N*N*N;
-                }
+                T_n = getT_n(N, alg_type);
                 input = ds.generateData(N, seed);
-                if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0
+                if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0 - brutal force
                     for(int j = 0; j < MAX_M_COUNT; j++){
                         tmp = brutalForceTest(input);
                         measureTable[j] = tmp;
@@ -249,6 +213,18 @@ int main(int argc, char ** argv) {
                     q = (float)(measureTable[0] * T_n_median)/(float)(t_n_median * T_n);
                     averageTime = average(measureTable, MAX_M_COUNT);
                     myPrintLine(N, averageTime * 1000.0f, q);
+                    if(medianToShow){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        medianToShow = false;
+                    }
+                    if(median == (N+R + N+2*R)/2){
+                        medianToShow = true;
+                    }
+                    else if(N + R == median){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        N += 2*R;
+                        continue;
+                    }
                     N += R;
                 }
                 else if(input[0].size() >= MAX_VERT_COUNT && alg_type == 0){
@@ -261,9 +237,21 @@ int main(int argc, char ** argv) {
                         measureTable[j] = tmp;
                         input = ds.generateData(N, seed);
                     }
-                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
+                    q = (float)(measureTable[0] * T_n_median)/(float)(t_n_median * T_n);
                     averageTime = average(measureTable, MAX_M_COUNT);
                     myPrintLine(N, averageTime * 1000.0f, q);
+                    if(medianToShow){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        medianToShow = false;
+                    }
+                    if(median == (N+R + N+2*R)/2){
+                        medianToShow = true;
+                    }
+                    else if(N + R == median){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        N += 2*R;
+                        continue;
+                    }
                     N += R;
                 }
 			}
@@ -283,12 +271,7 @@ int main(int argc, char ** argv) {
 			float measureTable[MAX_M_COUNT];
 			if(arg3 != nullptr){
                 alg_type = stoi(string(arg3));
-                if(alg_type == 0){
-                    T_n = Algorithms::newton(N*N, N) * N*N*N;
-                }
-                else {
-                    T_n = N*N*N;
-                }
+                T_n = getT_n(N, alg_type);
 			}
 			else {
                 cout << "Nie wybrano zadnego algorytmu!" << endl;
@@ -308,39 +291,9 @@ int main(int argc, char ** argv) {
                 cout << "Nie podano ilosci pomiarow!" << endl;
                 exit(1);
 			}
-			int tmp1 = N, tmp2 = N, mC1;
-			if(mCount % 2 == 0){
-                mC1 = mCount / 2 - 1;
-                for(int i = 0; i < mCount; i++){
-                    if(i < mC1){
-                        tmp1 += R;
-                    }
-                    else {
-                        tmp2 = tmp1;
-                        tmp2 += R;
-                        break;
-                    }
-                }
-                median = (tmp1 + tmp2)/2;
-			}
-			else {
-                mC1 = mCount / 2;
-                for(int i = 0; i < mCount; i++){
-                    if(i < mC1){
-                        tmp1 += R;
-                    }
-                    else {
-                        break;
-                    }
-                }
-                median = tmp1;
-			}
-			if(alg_type == 0){
-                T_n_median = Algorithms::newton(median * median, median) * median*median*median;
-			}
-			else {
-                T_n_median = median * median * median;
-			}
+			median = getMedian(N, R, mCount);
+			T_n_median = getT_n(median, alg_type);
+			T_n = getT_n(median, alg_type);
 			cout << "mediana = " << median << ", N = " << N <<  endl;
 			cout << "Rozpoczynam pomiary" << endl;
 			alg_type == 0 ? cout << "brutal force" << endl : cout << "optimal" << endl;
@@ -351,26 +304,35 @@ int main(int argc, char ** argv) {
 			else {
                 t_n_median = optAlgorithmTest(tmpVec);
 			}
+
+			float q_median = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
+            bool medianToShow = false;
+
 			cout << "| n      | t(n) [ms]      | q(n)" << endl;
 			cout << "--------------------------------" << endl;
-			q = (float)(t_n_median * T_n_median)/(t_n_median * T_n);
-			myPrintLine(median, t_n_median * 1000.0f, q);
 			for(int i = 0; i < mCount; i++){
-                if(alg_type == 0){
-                    T_n = Algorithms::newton(N*N, N) * N*N*N;
-                }
-                else {
-                    T_n = N*N*N;
-                }
+                T_n = getT_n(N, alg_type);
                 input = ds.generateData(N);
-                if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0
+                if(input[0].size() < MAX_VERT_COUNT && alg_type == 0){      // 'T' = 0 - brutal force
                     for(int j = 0; j < MAX_M_COUNT; j++){
                         tmp = brutalForceTest(input);
                         measureTable[j] = tmp;
                     }
                     averageTime = average(measureTable, MAX_M_COUNT);
-                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
+                    q = (float)(measureTable[0] * T_n_median)/(float)(t_n_median * T_n);
                     myPrintLine(N, averageTime * 1000.0f, q);
+                    if(medianToShow){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        medianToShow = false;
+                    }
+                    if(median == (N+R + N+2*R)/2){
+                        medianToShow = true;
+                    }
+                    else if(N + R == median){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        N += 2*R;
+                        continue;
+                    }
                     N += R;
                 }
                 else if(input[0].size() >= MAX_VERT_COUNT && alg_type == 0){
@@ -378,14 +340,26 @@ int main(int argc, char ** argv) {
                     return 0;
                 }
                 if(alg_type == 1){
-                    for(int j = 0; j < MAX_M_COUNT; j++){                       // 'T' = 1
+                    for(int j = 0; j < MAX_M_COUNT; j++){                       // 'T' = 1 - optimal
                         tmp = optAlgorithmTest(input);
                         measureTable[j] = tmp;
                         input = ds.generateData(N);
                     }
                     averageTime = average(measureTable, MAX_M_COUNT);
-                    q = (float)(measureTable[0] * T_n_median)/(t_n_median * T_n);
+                    q = (float)(measureTable[0] * T_n_median)/(float)(t_n_median * T_n);
                     myPrintLine(N, averageTime * 1000.0f, q);
+                    if(medianToShow){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        medianToShow = false;
+                    }
+                    if(median == (N+R + N+2*R)/2){
+                        medianToShow = true;
+                    }
+                    else if(N + R == median){
+                        myPrintLine(median, t_n_median * 1000.0f, q_median);
+                        N += 2*R;
+                        continue;
+                    }
                     N += R;
                 }
 			}
@@ -584,8 +558,8 @@ void brutalForce(vector<points> v)
 float brutalForceTest(vector<points> v)
 {
     const clock_t begin_time = clock();
-    SetOfSegments * bf;
-    bf = Algorithms::executeBrutalForce(v);
+    //SetOfSegments * bf;
+    Algorithms::executeBrutalForce(v);
     return float( clock() - begin_time ) / CLOCKS_PER_SEC;
 }
 
@@ -640,8 +614,8 @@ void optAlgorithm(vector<points> v)
 float optAlgorithmTest(vector<points> v)
 {
     const clock_t begin_time = clock();
-    SetOfSegments * opt;
-    opt = Algorithms::executeAlgorithm(v);
+    //SetOfSegments * opt;
+    Algorithms::executeAlgorithm(v);
     return float( clock() - begin_time ) / CLOCKS_PER_SEC;
 }
 
@@ -658,4 +632,45 @@ void drawToFile(HEZDIMAGE * image, SetOfSegments * s)
         ezd_line(*image, s->getSegments()[i]->getLeft().getX(), s->getSegments()[i]->getLeft().getY(),
                        s->getSegments()[i]->getRight().getX(), s->getSegments()[i]->getRight().getY(), WHITE);
     }
+}
+
+float getT_n(int N, int alg_type) {
+    if(alg_type == 0){      // brutal force
+        return Algorithms::newton(N * N, N) * N*N*N;
+    }
+    else {      // optimal
+        return N*N*N;
+    }
+}
+
+float getMedian(int N, int R, int mCount) {
+    float median;
+    int tmp1 = N, tmp2 = N, mC1;
+    if(mCount % 2 == 0){
+        mC1 = mCount / 2 - 1;
+        for(int i = 0; i < mCount; i++){
+            if(i < mC1){
+                tmp1 += R;
+            }
+            else {
+                tmp2 = tmp1;
+                tmp2 += R;
+                break;
+            }
+        }
+        median = (tmp1 + tmp2)/2;
+    }
+    else {
+        mC1 = mCount / 2;
+        for(int i = 0; i < mCount; i++){
+            if(i < mC1){
+                tmp1 += R;
+            }
+            else {
+                break;
+            }
+        }
+        median = tmp1;
+    }
+    return median;
 }

@@ -229,23 +229,39 @@ SetOfSegments * Algorithms::executeAlgorithm(vector<points> v)
     while(true){
         minDistance = INT_MAX;
         currDistance = INT_MAX;
-        for(int i = 0; i < v[0].size(); i++){
-            for(int j = 0; j < v[1].size(); j++){
-                if((currDistance = (int)sqrt(pow(v[0].at(i).getX() - v[1].at(j).getX(), 2) + pow(v[0].at(i).getY() - v[1].at(j).getY(), 2))) <= minDistance){
-                    minDistance = currDistance;
-                    indexI = i;
-                    indexJ = j;
+        if(v[0].size() > 1){
+            for(int i = 0; i < v[0].size(); i++){
+                for(int j = 0; j < v[1].size(); j++){
+                    if((currDistance = (int)sqrt(pow(v[0].at(i).getX() - v[1].at(j).getX(), 2) + pow(v[0].at(i).getY() - v[1].at(j).getY(), 2))) <= minDistance){
+                        minDistance = currDistance;
+                        indexI = i;
+                        indexJ = j;
+                    }
                 }
             }
+            tmpI = new Point2D(v[0].at(indexI).getX(), v[0].at(indexI).getY(), v[0].at(indexI).groupNumber);
+            tmpJ = new Point2D(v[1].at(indexJ).getX(), v[1].at(indexJ).getY(), v[1].at(indexJ).groupNumber);
+            result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
+            delete tmpI;
+            delete tmpJ;
+            v[0].erase(v[0].begin() + indexI);
+            v[1].erase(v[1].begin() + indexJ);
+            if(v[0].size() == 1){
+                tmpI = new Point2D(v[0].at(0).getX(), v[0].at(0).getY(),v[0].at(0).groupNumber);
+                tmpJ = new Point2D(v[1].at(0).getX(), v[1].at(0).getY(), v[1].at(0).groupNumber);
+                result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
+                v[0].clear();
+                v[1].clear();
+                if(tmpI != nullptr){
+                    delete tmpI;
+                }
+                if(tmpJ != nullptr){
+                    delete tmpJ;
+                }
+                break;
+            }
         }
-        tmpI = new Point2D(v[0].at(indexI).getX(), v[0].at(indexI).getY(), v[0].at(indexI).groupNumber);
-        tmpJ = new Point2D(v[1].at(indexJ).getX(), v[1].at(indexJ).getY(), v[1].at(indexJ).groupNumber);
-        result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
-        delete tmpI;
-        delete tmpJ;
-        v[0].erase(v[0].begin() + indexI);
-        v[1].erase(v[1].begin() + indexJ);
-        if(v[0].size() == 1){
+        else {
             tmpI = new Point2D(v[0].at(0).getX(), v[0].at(0).getY(),v[0].at(0).groupNumber);
             tmpJ = new Point2D(v[1].at(0).getX(), v[1].at(0).getY(), v[1].at(0).groupNumber);
             result->addSegment(new Segment(*tmpI, *tmpJ, segmentIndex++));
@@ -257,9 +273,6 @@ SetOfSegments * Algorithms::executeAlgorithm(vector<points> v)
             if(tmpJ != nullptr){
                 delete tmpJ;
             }
-            break;
-        }
-        else {
             break;
         }
     }
