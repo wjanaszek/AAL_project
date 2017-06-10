@@ -614,8 +614,9 @@ void optAlgorithm(vector<points> v)
 float optAlgorithmTest(vector<points> v)
 {
     const clock_t begin_time = clock();
-    //SetOfSegments * opt;
-    Algorithms::executeAlgorithm(v);
+    SetOfSegments * opt;
+    opt = Algorithms::executeAlgorithm(v);
+    delete opt;
     return float( clock() - begin_time ) / CLOCKS_PER_SEC;
 }
 
